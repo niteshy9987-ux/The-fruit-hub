@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Fruit Hub | Fresh Fruits Delivery</title>
+  <meta name="description" content="The Fruit Hub - Fresh fruits delivered to your doorstep." />
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f7faf7;
+      color: #222;
+    }
+    header {
+      background: #198754;
+      color: white;
+      padding: 22px 16px;
+      text-align: center;
+    }
+    header h1 { margin: 0 0 6px; font-size: 30px; }
+    header p { margin: 0; font-size: 15px; }
+    .notice {
+      background: #fff3cd;
+      color: #664d03;
+      padding: 12px 16px;
+      text-align: center;
+      font-weight: bold;
+    }
+    .container {
+      width: min(1100px, 94%);
+      margin: 22px auto;
+    }
+    h2 { margin-bottom: 14px; }
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 14px;
+    }
+    .card {
+      background: white;
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: 0 3px 12px rgba(0,0,0,.08);
+      text-align: center;
+    }
+    .fruit { font-size: 46px; }
+    .card h3 { margin: 8px 0 5px; }
+    .price { font-weight: bold; color: #198754; margin-bottom: 12px; }
+    button {
+      border: 0;
+      border-radius: 9px;
+      padding: 10px 14px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .add-btn { background: #198754; color: white; width: 100%; }
+    .add-btn:hover { background: #146c43; }
+    .cart {
+      margin-top: 28px;
+      background: white;
+      border-radius: 14px;
+      padding: 18px;
+      box-shadow: 0 3px 12px rgba(0,0,0,.08);
+    }
+    .cart-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 12px 0;
+      border-bottom: 1px solid #eee;
+    }
+    .qty button {
+      padding: 6px 10px;
+      background: #e9f5ee;
+      color: #146c43;
+    }
+    .qty span { display: inline-block; min-width: 28px; text-align: center; }
+    .empty { color: #777; text-align: center; padding: 15px 0; }
+    .total {
+      display: flex;
+      justify-content: space-between;
+      font-size: 20px;
+      font-weight: bold;
+      padding-top: 16px;
+    }
+    .order-form {
+      margin-top: 18px;
+      display: grid;
+      gap: 11px;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 9px;
+      font-size: 15px;
+    }
+    textarea { min-height: 90px; resize: vertical; }
+    .whatsapp {
+      background: #25d366;
+      color: white;
+      font-size: 16px;
+      padding: 13px;
+      width: 100%;
+    }
+    .whatsapp:hover { background: #1ebe5d; }
+    footer {
+      margin-top: 30px;
+      background: #222;
+      color: white;
+      text-align: center;
+      padding: 18px;
+      font-size: 14px;
+    }
+    .small { font-size: 13px; color: #666; margin-top: 7px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🍎 The Fruit Hub</h1>
+  <p>Fresh Fruits • Quality • Home Delivery</p>
+</header>
+
+<div class="notice">
+  🚚 Free delivery • Minimum order ₹50 • Delivery within 2 km
+</div>
+
+<main class="container">
+  <h2>🍉 Fresh Fruits</h2>
+
+  <section class="products" id="products"></section>
+
+  <section class="cart">
+    <h2>🛒 Your Cart</h2>
+    <div id="cartItems" class="empty">Your cart is empty.</div>
+
+    <div class="total">
+      <span>Total</span>
+      <span id="cartTotal">₹0</span>
+    </div>
+
+    <div class="order-form">
+      <h3>📋 Delivery Details</h3>
+      <input id="customerName" type="text" placeholder="Your Name" />
+      <input id="customerPhone" type="tel" placeholder="Mobile Number" />
+      <textarea id="customerAddress" placeholder="Delivery Address"></textarea>
+      <button class="whatsapp" onclick="sendWhatsAppOrder()">
+        📱 Order on WhatsApp
+      </button>
+      <div class="small">
+        Your order details will open in WhatsApp for confirmation.
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div>© 2026 The Fruit Hub</div>
+  <div>Fresh fruits delivered to your doorstep.</div>
+</footer>
+
+<script>
+  // ==============================
+  // THE FRUIT HUB PRODUCT LIST
+  // ==============================
+  const products = [
+    { id: 1, name: "Apple", emoji: "🍎", price: 250, unit: "kg" },
+    { id: 2, name: "Banana", emoji: "🍌", price: 60, unit: "dozen" },
+    { id: 3, name: "Anar", emoji: "❤️", price: 200, unit: "kg" },
+    { id: 4, name: "Amrud", emoji: "🥭", price: 150, unit: "kg" },
+    { id: 5, name: "Kalingad", emoji: "🍉", price: 100, unit: "piece" },
+    { id: 6, name: "Nariyal Pani", emoji: "🥥", price: 80, unit: "piece" },
+    { id: 7, name: "Orange", emoji: "🍊", price: 120, unit: "kg" },
+    { id: 8, name: "Mosambi", emoji: "🍋", price: 100, unit: "kg" },
+    { id: 9, name: "Papaya", emoji: "🧡", price: 60, unit: "kg" },
+    { id: 10, name: "Kiwi", emoji: "🥝", price: 140, unit: "box" },
+    { id: 11, name: "Pineapple", emoji: "🍍", price: 120, unit: "piece" }
+  ];
+
+  let cart = [];
+
+  function renderProducts() {
+    const container = document.getElementById("products");
+
+    container.innerHTML = products.map(product => `
+      <div class="card">
+        <div class="fruit">${product.emoji}</div>
+        <h3>${product.name}</h3>
+        <div class="price">₹${product.price} / ${product.unit}</div>
+        <button class="add-btn" onclick="addToCart(${product.id})">
+          Add to Cart
+        </button>
+      </div>
+    `).join("");
+  }
+
+  function addToCart(id) {
+    const product = products.find(p => p.id === id);
+    const existing = cart.find(item => item.id === id);
+
+    if (existing) {
+      existing.qty++;
+    } else {
+      cart.push({ ...product, qty: 1 });
+    }
+
+    renderCart();
+  }
+
+  function changeQty(id, amount) {
+    const item = cart.find(p => p.id === id);
+    if (!item) return;
+
+    item.qty += amount;
+
+    if (item.qty <= 0) {
+      cart = cart.filter(p => p.id !== id);
+    }
+
+    renderCart();
+  }
+
+  function getTotal() {
+    return cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+  }
+
+  function renderCart() {
+    const cartItems = document.getElementById("cartItems");
+    const total = document.getElementById("cartTotal");
+
+    total.textContent = "₹" + getTotal();
+
+    if (cart.length === 0) {
+      cartItems.innerHTML = '<div class="empty">Your cart is empty.</div>';
+      return;
+    }
+
+    cartItems.innerHTML = cart.map(item => `
+      <div class="cart-item">
+        <div>
+          <strong>${item.emoji} ${item.name}</strong>
+          <div class="small">₹${item.price} / ${item.unit}</div>
+        </div>
+
+        <div class="qty">
+          <button onclick="changeQty(${item.id}, -1)">−</button>
+          <span>${item.qty}</span>
+          <button onclick="changeQty(${item.id}, 1)">+</button>
+        </div>
+
+        <strong>₹${item.price * item.qty}</strong>
+      </div>
+    `).join("");
+  }
+
+  function sendWhatsAppOrder() {
+    if (cart.length === 0) {
+      alert("Please add at least one fruit to your cart.");
+      return;
+    }
+
+    const name = document.getElementById("customerName").value.trim();
+    const phone = document.getElementById("customerPhone").value.trim();
+    const address = document.getElementById("customerAddress").value.trim();
+
+    if (!name || !phone || !address) {
+      alert("Please enter your name, mobile number and delivery address.");
+      return;
+    }
+
+    const total = getTotal();
+
+    if (total < 50) {
+      alert("Minimum order amount is ₹50.");
+      return;
+    }
+
+    let message = "🍎 *THE FRUIT HUB - NEW ORDER*%0A%0A";
+    message += "*Customer Details*%0A";
+    message += "Name: " + encodeURIComponent(name) + "%0A";
+    message += "Mobile: " + encodeURIComponent(phone) + "%0A";
+    message += "Address: " + encodeURIComponent(address) + "%0A%0A";
+
+    message += "*Order Items*%0A";
+
+    cart.forEach(item => {
+      message += encodeURIComponent(
+        item.emoji + " " + item.name +
+        " × " + item.qty +
+        " = ₹" + (item.price * item.qty)
+      ) + "%0A";
+    });
+
+    message += "%0A*Total: ₹" + total + "*%0A";
+    message += "🚚 Free Delivery";
+
+    // IMPORTANT:
+    // Replace YOUR_WHATSAPP_NUMBER below with your WhatsApp number.
+    // India format example: 919876543210
+    const whatsappNumber = "917208449882";
+
+    const url = "https://wa.me/" + whatsappNumber + "?text=" + message;
+    window.open(url, "_blank");
+  }
+
+  renderProducts();
+  renderCart();
+</script>
+
+</body>
+</html>
